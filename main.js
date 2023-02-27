@@ -1,5 +1,6 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
+const fortune = require('./lib/fortune')
 
 const app = express()
 
@@ -17,8 +18,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/about', (req, res) => {
-    const randomFortune = fortunes[Math.floor(Math.random()*fortunes.length)]
-    res.render('about', { fortune: randomFortune })
+    res.render('about', { fortune: fortune.getFortune() } )
 })
 
 app.use((req, res) => {
@@ -50,3 +50,9 @@ const fortunes = [
     "You will have a pleasant surprise.",
     "Whenever possible, keep it simple.",
 ]
+
+exports.getFortune = () => {
+    const idx =
+        Math.floor(Math.random()*fortuneCookies.length)
+    return fortuneCookies[idx]
+}

@@ -1,1 +1,15 @@
-<h1>Welcome to Meadowlark Travel</h1>
+<h1>Pokemon List</h1>
+<script>
+            const listEl = document.querySelector('ul');
+    fetch('../pokemon.json')
+            .then(res => {
+                return res.json();
+                console.log(res)
+                })
+    .then(data=> {
+        data.forEach(pokemon => {
+            const markup = '<li>${pokemon.name}</li>'
+            document.querySelector('ul').insertAdjacentHTML('beforeend', markup)
+        })
+    })
+</script>

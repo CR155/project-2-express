@@ -1,7 +1,8 @@
 const express = require('express')
 const expressHandlebars = require('express-handlebars')
-const fortune = require('./lib/fortune')
-
+const pokemon = require('./pokemon.json')
+var willTrade = pokemon.filter(pokemon => pokemon.willTrade === true)
+var sell = pokemon.filter(pokemon => pokemon.price !== null)
 const app = express()
 
 app.engine('handlebars',
@@ -13,13 +14,17 @@ app.set('view engine', 'handlebars')
 const port = process.envPORT || 3000
 
 app.use(express.static(__dirname + '/public'))
-app.get('/', (req, res) => {
-    res.render('home')
-})
 
-app.get('/about', (req, res) => {
-    res.render('about', { fortune: fortune.getFortune() } )
-})
+app.get('/', (req, res) =>
+    res.json(pokemon))
+app.get('/api/cards', (req, res) =>
+res.json(pokemon))
+
+app.get('/api/cards/trade', (req, res) =>
+res.json(willTrade))
+
+app.get('/api/cards/sell', (req, res) =>
+res.json(sell))
 
 app.use((req, res) => {
     res.status(404)
@@ -42,17 +47,3 @@ app.listen(port, () => console.log(
     'Express started on ' +
     'http://localhost:${port}; ' +
     'press Ctrl-C to terminate.'))
-
-const fortunes = [
-    "Conquer your fears or they will conquer you.",
-    "Rivers need springs.",
-    "Do not fear what you don't know.",
-    "You will have a pleasant surprise.",
-    "Whenever possible, keep it simple.",
-]
-
-exports.getFortune = () => {
-    const idx =
-        Math.floor(Math.random()*fortuneCookies.length)
-    return fortuneCookies[idx]
-}
